@@ -5,10 +5,11 @@
 ### 3) Выбираем boot Arch Linux
 ### 4) После того как ОС загрузилась, проверяем с помощью утилыты - lsblk(показывает блочные ус-ва подключенные к АРМ\серверу) наш созданный диск и что он видится в ОС
 ### 5) В первую очередь нам надо обработать диск, а именно разбить его на партиции и накатить туда FS, с помощью [fdisk](https://ru.wikipedia.org/wiki/Fdisk) или cfdisk делим диск на несколько частей
+## ТЗ:
 	1gb - boot/efi
 	4.5gb - /
 	4.5gb - /var\home
-
+## Внешний вид утилиты cfdisk
 ```sh
 							Disk: /dev/sda
                                          Size: 10 GiB, 10737418240 bytes, 20971520 sectors
@@ -84,7 +85,7 @@ sda      8:0    0    10G  0 disk
 └─sda3   8:3    0   4.5G  0 part /mnt/home
 sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
 ```
-### 9) Проверяем интернет, доступность 80 порта, зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе соответственно скорость закачки быстрее
+### 9) Проверяем интернет c виртуалки, доступность 80 порта(telnet), зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе, соответственно скорость закачки быстрее
 ```sh
 root@archiso ~ # cat /etc/pacman.d/mirrorlist | grep yandex > /etc/pacman.d/mirrorlist                                        
 root@archiso ~ # cat /etc/pacman.d/mirrorlist                                         
@@ -157,7 +158,7 @@ nano /etc/locale.gen
 en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8
 ```
-### 16) Обновим локаль
+### 16) Обновим [локаль](https://wiki.archlinux.org/index.php/Locale)
 ```sh
 [root@archiso /]# locale-gen
 Generating locales...
@@ -169,7 +170,7 @@ Generation complete.
 ```sh
 echo LANG="ru_RU.UTF-8" > /etc/locale.conf
 ```
-### 18) Указываем keymap для console + прописываем шрифт
+### 18) Указываем [keymap](https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration) для console + прописываем шрифт
 ```sh
 nano /etc/vconsole.conf
 KEYMAP=ru
