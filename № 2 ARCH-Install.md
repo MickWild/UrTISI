@@ -90,7 +90,7 @@ sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
 root@archiso ~ # cat /etc/pacman.d/mirrorlist                                         
 Server = http://mirror.yandex.ru/archlinux/$repo/os/$arch
 ```
-### 10) С помощью pacstrap начинаем заливать устанавливать базовые пакеты нашей OS
+### 10) С помощью pacstrap начинаем заливать базовые пакеты нашей OS
 <details>
 <pre>
 
