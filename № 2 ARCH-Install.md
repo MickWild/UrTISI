@@ -1,14 +1,16 @@
 # UrTISI
 
-1) создаем виртуальную машину,linux
-2) загружаемся с диска archlinux
-3) выбираем boot Arch Linux
-4) проверяем с помощью lsblk наш созданный диск и что он видится в ОС
-5) с помощью fdisk или cfdisk делим диск на несколько частей 
+### 1) создаем виртуальную машину,linux
+### 2) загружаемся с диска archlinux
+### 3) выбираем boot Arch Linux
+### 4) проверяем с помощью lsblk наш созданный диск и что он видится в ОС
+### 5) с помощью fdisk или cfdisk делим диск на несколько частей 
 				1gb - boot
 				4.5gb - /
 				4.5gb - /var\home
-                                                         Disk: /dev/sda
+
+```sh
+							Disk: /dev/sda
                                          Size: 10 GiB, 10737418240 bytes, 20971520 sectors
                                    Label: gpt, identifier: 7E459494-6D79-E348-A86B-A356E487131B
 
@@ -16,7 +18,9 @@
 >>  /dev/sda1                            2048             2099199            2097152               1G EFI System                   
     /dev/sda2                         2099200            11536383            9437184             4.5G Linux root (x86-64)
     /dev/sda3                        11536384            20971486            9435103             4.5G Linux filesystem
-6) с помощью lsblk проверяем опять что у нас создались разделы
+```
+### 6) с помощью lsblk проверяем опять что у нас создались разделы
+```sh
 root@archiso ~ # lsblk
 NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
 loop0    7:0    0 508.2M  1 loop /run/archiso/sfs/airootfs
@@ -25,8 +29,10 @@ sda      8:0    0    10G  0 disk
 ├─sda2   8:2    0   4.5G  0 part 
 └─sda3   8:3    0   4.5G  0 part 
 sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
-7) начинаем создавать фс с помощью mkfs.* на наших партициях
-						fat32 /boot
+```
+### 7) начинаем создавать фс с помощью mkfs.* на наших партициях
+```sh
+fat32 /boot
 						ext4\xfs /
             root@archiso ~ # mkfs.fat -F32 /dev/sda1
 mkfs.fat 4.1 (2017-01-24)
@@ -59,7 +65,9 @@ Allocating group tables: done
 Writing inode tables: done                            
 Creating journal (16384 blocks): done
 Writing superblocks and filesystem accounting information: done 
-8) после создания фс монтируем с помощью mount все партиции в директорию /mnt
+```
+### 8) после создания фс монтируем с помощью mount все партиции в директорию /mnt
+```sh
 root@archiso ~ # mount /dev/sda2 /mnt 
 root@archiso ~ # mkdir -p /mnt/boot/efi | mount /dev/sda1 /mnt/boot/efi
 root@archiso ~ # mkdir -p /mnt/home | mount /dev/sda3 /mnt/home
@@ -71,11 +79,15 @@ sda      8:0    0    10G  0 disk
 ├─sda2   8:2    0   4.5G  0 part /mnt
 └─sda3   8:3    0   4.5G  0 part /mnt/home
 sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
-9) проверяем зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе соответственно скорость закаки быстрее
+```
+### 9) проверяем зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе соответственно скорость закаки быстрее
+```sh
 1 root@archiso ~ # cat /etc/pacman.d/mirrorlist | grep yandex > /etc/pacman.d/mirrorlist                                        :(
 root@archiso ~ # cat /etc/pacman.d/mirrorlist                                         
 Server = http://mirror.yandex.ru/archlinux/$repo/os/$arch
-10) с помощью pacstrap начинаем заливать устанавливать базовые пакеты нашей OS
+```
+### 10) с помощью pacstrap начинаем заливать устанавливать базовые пакеты нашей OS
+```sh
 root@archiso ~ # pacstrap /mnt base base-devel
 ==> Creating install root at /mnt
 ==> Installing packages to /mnt
@@ -112,33 +124,51 @@ warning: skipping target: texinfo
 warning: skipping target: util-linux
 warning: skipping target: which
 resolving dependencies...
-11) после заливки ОС нам нам создать файл в котором написано какие партиции при загрузке  монтировать, как и куда
+```
+### 11) после заливки ОС нам нам создать файл в котором написано какие партиции при загрузке  монтировать, как и куда
+```sh
 root@archiso ~ # genfstab -p /mnt >> /mnt/etc/fstab     
-12) Заходим в только что залитую ОС 
+```
+### 12) Заходим в только что залитую ОС 
+```sh
 root@archiso ~ # arch-chroot /mntt
-13) создаем имя нашей системы 
- echo name > /etc/hostname
-14) Настраиваем часовой пояс
- ln -s /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
-15) Добавим русскую локаль в систему
+```
+### 13) создаем имя нашей системы 
+```sh
+echo name > /etc/hostname
+```
+### 14) Настраиваем часовой пояс
+```sh
+ln -s /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
+```
+### 15) Добавим русскую локаль в систему
+```sh
 nano /etc/locale.gen
 надо расскоментировать строки 
 en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8
-16) обновим локаль
+```
+### 16) обновим локаль
+```sh
 locale-gen
 [root@archiso /]# locale-gen
 Generating locales...
   en_US.UTF-8... done
   ru_RU.UTF-8... done
 Generation complete.
-17) укажем язык системы
+```
+### 17) укажем язык системы
+```sh
 echo LANG="ru_RU.UTF-8" > /etc/locale.conf
-18) Указываем keymap для console + прописываем шрифт
+```
+### 18) Указываем keymap для console + прописываем шрифт
+```sh
 nano /etc/vconsole.conf
 KEYMAP=ru
 FONT=cyr-sun16
-19) создадим загрузочный RAM диск
+```
+### 19) создадим загрузочный RAM диск
+```sh
 [root@archiso /]# mkinitcpio -p linux
 ==> Building image from preset: /etc/mkinitcpio.d/linux.preset: 'default'
   -> -k /boot/vmlinuz-linux -c /etc/mkinitcpio.conf -g /boot/initramfs-linux.img
@@ -169,12 +199,16 @@ FONT=cyr-sun16
 ==> Generating module dependencies
 ==> Creating gzip-compressed initcpio image: /boot/initramfs-linux-fallback.img
 ==> Image generation successful
-20) поменяем парот учетки root
+```
+### 20) поменяем парот учетки root
+```sh
 [root@archiso /]# passwd
 New password: 
 Retype new password: 
 passwd: password updated successfully
-21) установим загрузчик и сетевой мэнеджер
+```
+### 21) установим загрузчик и сетевой мэнеджер
+```sh
 [root@archiso /]# pacman -S grub efibootmgr networkmanager
 resolving dependencies...
 looking for conflicting packages...
@@ -269,15 +303,19 @@ Running in chroot, ignoring request.
 (5/6) Reloading system bus configuration...
 Running in chroot, ignoring request: try-reload-or-restart
 (6/6) Updating the info directory file...
-22) установим наш загрузчик 
+```
+### 22) установим наш загрузчик 
+```sh
 [root@archiso /]# grub-install --target=x86_64-efi --removable
 Installing for x86_64-efi platform.
 Installation finished. No error reported.
-23) создадим конфиг загрузчика 
+```
+### 23) создадим конфиг загрузчика 
+```sh
 [root@archiso /]# grub-mkconfig -o /boot/grub/grub.cfg
 Generating grub configuration file ...
 Found linux image: /boot/vmlinuz-linux
 Found initrd image: /boot/initramfs-linux.img
 Found fallback initrd image(s) in /boot: initramfs-linux-fallback.img
 done
-
+```
