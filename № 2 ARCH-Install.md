@@ -1,13 +1,13 @@
 # UrTISI
 
-### 1) создаем виртуальную машину,linux
-### 2) загружаемся с диска archlinux
-### 3) выбираем boot Arch Linux
-### 4) проверяем с помощью lsblk наш созданный диск и что он видится в ОС
-### 5) с помощью fdisk или cfdisk делим диск на несколько частей 
-				1gb - boot
-				4.5gb - /
-				4.5gb - /var\home
+### 1) Создаем виртуальную машину,linux
+### 2) Скачиваем с [офф.сайта](https://mirror.yandex.ru/archlinux/iso/2019.09.01/archlinux-2019.09.01-x86_64.iso) загрузочный диск и загружаемся с диска ISO
+### 3) Выбираем boot Arch Linux
+### 4) После того как ОС загрузилась, проверяем с помощью lsblk наш созданный диск и что он видится в ОС
+### 5) В первую очередь нам надо обработать диск, а именно разбить его на партиции и накатить туда FS, с помощью fdisk или cfdisk делим диск на несколько частей
+	1gb - boot/efi
+	4.5gb - /
+	4.5gb - /var\home
 
 ```sh
 							Disk: /dev/sda
@@ -19,7 +19,7 @@
     /dev/sda2                         2099200            11536383            9437184             4.5G Linux root (x86-64)
     /dev/sda3                        11536384            20971486            9435103             4.5G Linux filesystem
 ```
-### 6) с помощью lsblk проверяем опять что у нас создались разделы
+### 6) С помощью lsblk проверяем, что у нас создались разделы
 ```sh
 root@archiso ~ # lsblk
 NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
@@ -30,7 +30,7 @@ sda      8:0    0    10G  0 disk
 └─sda3   8:3    0   4.5G  0 part 
 sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
 ```
-### 7) начинаем создавать фс с помощью mkfs.* на наших партициях
+### 7) Начинаем создавать фс с помощью mkfs.* на наших партициях
 <details>
 <pre>
 
@@ -70,7 +70,7 @@ Creating journal (16384 blocks): done
 Writing superblocks and filesystem accounting information: done 
 ```
 </pre></details>
-### 8) после создания фс монтируем с помощью mount все партиции в директорию /mnt
+### 8) После создания FS, чтобы начать работать с дисками, нам надо их смонтировать в директорию, монтируем с помощью mount все партиции в директорию /mnt или любую другую, можно создать свою
 ```sh
 root@archiso ~ # mount /dev/sda2 /mnt 
 root@archiso ~ # mkdir -p /mnt/boot/efi | mount /dev/sda1 /mnt/boot/efi
@@ -84,13 +84,13 @@ sda      8:0    0    10G  0 disk
 └─sda3   8:3    0   4.5G  0 part /mnt/home
 sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
 ```
-### 9) проверяем зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе соответственно скорость закаки быстрее
+### 9) Проверяем интернет, доступность 80 порта, зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе соответственно скорость закачки быстрее
 ```sh
 1 root@archiso ~ # cat /etc/pacman.d/mirrorlist | grep yandex > /etc/pacman.d/mirrorlist                                        :(
 root@archiso ~ # cat /etc/pacman.d/mirrorlist                                         
 Server = http://mirror.yandex.ru/archlinux/$repo/os/$arch
 ```
-### 10) с помощью pacstrap начинаем заливать устанавливать базовые пакеты нашей OS
+### 10) С помощью pacstrap начинаем заливать устанавливать базовые пакеты нашей OS
 <details>
 <pre>
 
@@ -133,15 +133,15 @@ warning: skipping target: which
 resolving dependencies...
 ```
 </pre></details>
-### 11) после заливки ОС нам нам создать файл в котором написано какие партиции при загрузке  монтировать, как и куда
+### 11) После заливки ОС нам нам создать файл в котором написано какие партиции при загрузке монтировать, как и куда
 ```sh
 root@archiso ~ # genfstab -p /mnt >> /mnt/etc/fstab     
 ```
-### 12) Заходим в только что залитую ОС 
+### 12) Заходим в только что залитую ОС, и начинает работать и донастраивать ее из под нее
 ```sh
 root@archiso ~ # arch-chroot /mntt
 ```
-### 13) создаем имя нашей системы 
+### 13) Создаем имя нашей системы 
 ```sh
 echo name > /etc/hostname
 ```
@@ -156,7 +156,7 @@ nano /etc/locale.gen
 en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8
 ```
-### 16) обновим локаль
+### 16) Обновим локаль
 ```sh
 locale-gen
 [root@archiso /]# locale-gen
@@ -165,7 +165,7 @@ Generating locales...
   ru_RU.UTF-8... done
 Generation complete.
 ```
-### 17) укажем язык системы
+### 17) Укажем язык системы
 ```sh
 echo LANG="ru_RU.UTF-8" > /etc/locale.conf
 ```
@@ -175,7 +175,7 @@ nano /etc/vconsole.conf
 KEYMAP=ru
 FONT=cyr-sun16
 ```
-### 19) создадим загрузочный RAM диск
+### 19) Создадим загрузочный RAM диск
 <details>
 <pre>
 
@@ -212,14 +212,14 @@ FONT=cyr-sun16
 ==> Image generation successful
 ```
 </pre></details>
-### 20) поменяем парот учетки root
+### 20) Поменяем пароль учетки root или можем добавить ссвою с помощью adduser
 ```sh
 [root@archiso /]# passwd
 New password: 
 Retype new password: 
 passwd: password updated successfully
 ```
-### 21) установим загрузчик и сетевой мэнеджер
+### 21) Установим загрузчик и сетевой менеджер для того чтобы работала сеть
 <details>
 <pre>
 
@@ -320,13 +320,13 @@ Running in chroot, ignoring request: try-reload-or-restart
 (6/6) Updating the info directory file...
 ```
 </pre></details>
-### 22) установим наш загрузчик 
+### 22) Установим наш загрузчик 
 ```sh
 [root@archiso /]# grub-install --target=x86_64-efi --removable
 Installing for x86_64-efi platform.
 Installation finished. No error reported.
 ```
-### 23) создадим конфиг загрузчика 
+### 23) Создадим конфиг загрузчика 
 ```sh
 [root@archiso /]# grub-mkconfig -o /boot/grub/grub.cfg
 Generating grub configuration file ...
