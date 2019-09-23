@@ -31,6 +31,9 @@ sda      8:0    0    10G  0 disk
 sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
 ```
 ### 7) начинаем создавать фс с помощью mkfs.* на наших партициях
+<details>
+<pre>
+
 ```sh
 fat32 /boot
 						ext4\xfs /
@@ -66,6 +69,7 @@ Writing inode tables: done
 Creating journal (16384 blocks): done
 Writing superblocks and filesystem accounting information: done 
 ```
+</pre></details>
 ### 8) после создания фс монтируем с помощью mount все партиции в директорию /mnt
 ```sh
 root@archiso ~ # mount /dev/sda2 /mnt 
@@ -87,6 +91,9 @@ root@archiso ~ # cat /etc/pacman.d/mirrorlist
 Server = http://mirror.yandex.ru/archlinux/$repo/os/$arch
 ```
 ### 10) с помощью pacstrap начинаем заливать устанавливать базовые пакеты нашей OS
+<details>
+<pre>
+
 ```sh
 root@archiso ~ # pacstrap /mnt base base-devel
 ==> Creating install root at /mnt
@@ -125,6 +132,7 @@ warning: skipping target: util-linux
 warning: skipping target: which
 resolving dependencies...
 ```
+</pre></details>
 ### 11) после заливки ОС нам нам создать файл в котором написано какие партиции при загрузке  монтировать, как и куда
 ```sh
 root@archiso ~ # genfstab -p /mnt >> /mnt/etc/fstab     
@@ -168,6 +176,9 @@ KEYMAP=ru
 FONT=cyr-sun16
 ```
 ### 19) создадим загрузочный RAM диск
+<details>
+<pre>
+
 ```sh
 [root@archiso /]# mkinitcpio -p linux
 ==> Building image from preset: /etc/mkinitcpio.d/linux.preset: 'default'
@@ -200,6 +211,7 @@ FONT=cyr-sun16
 ==> Creating gzip-compressed initcpio image: /boot/initramfs-linux-fallback.img
 ==> Image generation successful
 ```
+</pre></details>
 ### 20) поменяем парот учетки root
 ```sh
 [root@archiso /]# passwd
@@ -208,6 +220,9 @@ Retype new password:
 passwd: password updated successfully
 ```
 ### 21) установим загрузчик и сетевой мэнеджер
+<details>
+<pre>
+
 ```sh
 [root@archiso /]# pacman -S grub efibootmgr networkmanager
 resolving dependencies...
@@ -304,6 +319,7 @@ Running in chroot, ignoring request.
 Running in chroot, ignoring request: try-reload-or-restart
 (6/6) Updating the info directory file...
 ```
+</pre></details>
 ### 22) установим наш загрузчик 
 ```sh
 [root@archiso /]# grub-install --target=x86_64-efi --removable
