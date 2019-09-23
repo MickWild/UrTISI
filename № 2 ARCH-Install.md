@@ -326,7 +326,7 @@ Running in chroot, ignoring request: try-reload-or-restart
 Installing for x86_64-efi platform.
 Installation finished. No error reported.
 ```
-### 23) Создадим конфиг загрузчика 
+### 23) Создадим конфиг загрузчика, после успешного создания выходим (exit) из нашей ОС, потом перезагружаемся, и после перезагрузки выбираем для загрузки установленную нами ОС
 ```sh
 [root@archiso /]# grub-mkconfig -o /boot/grub/grub.cfg
 Generating grub configuration file ...
