@@ -86,7 +86,7 @@ sr0     11:0    1   622M  0 rom  /run/archiso/bootmnt
 ```
 ### 9) Проверяем интернет, доступность 80 порта, зеркало с пакетами для арч и ставим яндексовский, т.к. нам до него ближе соответственно скорость закачки быстрее
 ```sh
-1 root@archiso ~ # cat /etc/pacman.d/mirrorlist | grep yandex > /etc/pacman.d/mirrorlist                                        :(
+root@archiso ~ # cat /etc/pacman.d/mirrorlist | grep yandex > /etc/pacman.d/mirrorlist                                        
 root@archiso ~ # cat /etc/pacman.d/mirrorlist                                         
 Server = http://mirror.yandex.ru/archlinux/$repo/os/$arch
 ```
@@ -139,26 +139,26 @@ root@archiso ~ # genfstab -p /mnt >> /mnt/etc/fstab
 ```
 ### 12) Заходим в только что залитую ОС, и начинает работать и донастраивать ее из под нее
 ```sh
-root@archiso ~ # arch-chroot /mntt
+root@archiso ~ # arch-chroot /mnt
 ```
-### 13) Создаем имя нашей системы 
+### 13) Создаем имя нашей системы, с помощью утилиты echo отправляем имя в файл /etc/hostname (если его нет, он создастся)
 ```sh
 echo name > /etc/hostname
 ```
-### 14) Настраиваем часовой пояс
+### 14) Настраиваем часовой пояс, с помощью утилиты ln создаем ссылку на уже готовый файл, чтобы ОС обращалась к нему
 ```sh
 ln -s /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
 ```
-### 15) Добавим русскую локаль в систему
+### 15) Добавим русскую локаль в систему с помощью текстового редактора nano - очень простой в освоении информацию по нему читать [тут](https://help.ubuntu.ru/wiki/nano)
 ```sh
 nano /etc/locale.gen
-надо расскоментировать строки 
+
+########надо расскоментировать строки######## 
 en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8
 ```
 ### 16) Обновим локаль
 ```sh
-locale-gen
 [root@archiso /]# locale-gen
 Generating locales...
   en_US.UTF-8... done
