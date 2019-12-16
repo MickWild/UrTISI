@@ -50,6 +50,7 @@ make: *** [sub-make] Error 2
 /bin/sh: flex: command not found
 ```
    Соответствеено нам нужно скачать и установить его 
+   
 7) После того, как когфигурация соберется, терминал поприветствует вас окном с просьбой выбрать параметры конфигурации
 ```console
 root@localhost ~/linux-5.4.3# make oldconfig
@@ -77,7 +78,7 @@ scripts/kconfig/conf  --oldconfig Kconfig
 *
 Compile also drivers which will not load (COMPILE_TEST) [N/y/?] (NEW)
 ```
-7.1) Оставляем все как есть, если кто то хочет изменить конфигурацию, надо читать документы чтобы понимать что вы включаете или выключаете https://www.kernel.org/doc/
+  7.1) Оставляем все как есть, если кто то хочет изменить конфигурацию, надо читать документы чтобы понимать что вы включаете или выключаете https://www.kernel.org/doc/
 8) После успешного создания конфига, начинаем сборку ядра в 4 потока 
 ```console
 root@localhost ~/linux-5.4.3# time make -j4
@@ -108,7 +109,48 @@ root@localhost ~/linux-5.4.3# time make -j4
 > Dec 16 17:58:57 Installed: krb5-devel-1.15.1-37.el7_7.2.x86_64
 > Dec 16 17:58:57 Installed: 1:openssl-devel-1.0.2k-19.el7.x86_64
 > Dec 16 18:00:04 Installed: elfutils-libelf-devel-0.176-2.el7.x86_64
+9) После успешной сборки ядра производим его установку
 
+```console
+root@localhost ~/linux-5.4.3# make install &&make modules_install
+```
 
+10) Сборка и установка закончены, теперь требуется обновить конфигурацию загрузчика grub для того чтобы он знал он новой версии нашего ядра и мы смогли с ним загрузиться
 
+```console
+grub2-mkconfig -o /boot/grub/grub.cfg
+```
+ключ "-o" обозначает папку и файл нового сгенерированного конфига загрузчика
+После перезагрузки у вас должно быть на выбор 3-4 ядра, одно из которых будет ваше.
 
+11) Далее нам требуется скачать файлы самого заббика, воспользуемся командой wget пример:
+
+```console
+wget https://repo.zabbix.com/zabbix/4.4/rhel/7/x86_64/zabbix-web-mysql-4.4.3-1.el7.noarch.rpm
+```
+Все необходимые пакеты для работы zabbix-server можно будет посмотреть на официальном сайте заббикс в документации по установке https://www.zabbix.com/documentation/current/manual или в видеогиде https://www.youtube.com/embed/yYmkFf3AEBo?autoplay=1
+12) Чтобы установить пакеты, надо использовать менеджер пакетов 
+на Red Hat rpm -i <название пакета>, 
+на Debian dpkg -i <название пакета>
+Во время установки пакетов приложений могут возникнуть проблемы в установке, проблемы возникают из-за неразрешенный зависимостей, соответственно надо установить недостающие пакеты. Пример: 
+```console
+warning: zabbix-agent-4.4.3-1.el7.x86_64.rpm: Header V4 RSA/SHA512 Signature, key ID a14fe591: NOKEY
+error: Failed dependencies:
+	java-headless >= 1.6.0 is needed by zabbix-java-gateway-4.4.3-1.el7.x86_64
+	fping is needed by zabbix-server-mysql-4.4.3-1.el7.x86_64
+	libOpenIPMI.so.0()(64bit) is needed by zabbix-server-mysql-4.4.3-1.el7.x86_64
+	libOpenIPMIposix.so.0()(64bit) is needed by zabbix-server-mysql-4.4.3-1.el7.x86_64
+	libevent-2.0.so.5()(64bit) is needed by zabbix-server-mysql-4.4.3-1.el7.x86_64
+	libnetsnmp.so.31()(64bit) is needed by zabbix-server-mysql-4.4.3-1.el7.x86_64
+	libodbc.so.2()(64bit) is needed by zabbix-server-mysql-4.4.3-1.el7.x86_64
+	dejavu-sans-fonts is needed by zabbix-web-4.4.3-1.el7.noarch
+	httpd is needed by zabbix-web-4.4.3-1.el7.noarch
+	php >= 5.4 is needed by zabbix-web-4.4.3-1.el7.noarch
+	php-bcmath is needed by zabbix-web-4.4.3-1.el7.noarch
+	php-gd is needed by zabbix-web-4.4.3-1.el7.noarch
+	php-ldap is needed by zabbix-web-4.4.3-1.el7.noarch
+	php-mbstring is needed by zabbix-web-4.4.3-1.el7.noarch
+	php-xml is needed by zabbix-web-4.4.3-1.el7.noarch
+	php-mysql is needed by zabbix-web-mysql-4.4.3-1.el7.noarch
+```
+Название пакетов которых не хватает для zabbix'a
