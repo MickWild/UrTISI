@@ -129,6 +129,7 @@ grub2-mkconfig -o /boot/grub/grub.cfg
 wget https://repo.zabbix.com/zabbix/4.4/rhel/7/x86_64/zabbix-web-mysql-4.4.3-1.el7.noarch.rpm
 ```
 Все необходимые пакеты для работы zabbix-server можно будет посмотреть на официальном сайте заббикс в документации по установке https://www.zabbix.com/documentation/current/manual или в видеогиде https://www.youtube.com/embed/yYmkFf3AEBo?autoplay=1
+
 12) Чтобы установить пакеты, надо использовать менеджер пакетов 
 на Red Hat rpm -i <название пакета>, 
 на Debian dpkg -i <название пакета>
