@@ -154,4 +154,4 @@ error: Failed dependencies:
 	php-xml is needed by zabbix-web-4.4.3-1.el7.noarch
 	php-mysql is needed by zabbix-web-mysql-4.4.3-1.el7.noarch
 ```
-Название пакетов которых не хватает для zabbix'a
+Название пакетов-зависимостей которых не хватает для zabbix'a
