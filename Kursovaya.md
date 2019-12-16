@@ -155,3 +155,15 @@ error: Failed dependencies:
 	php-mysql is needed by zabbix-web-mysql-4.4.3-1.el7.noarch
 ```
 Название пакетов-зависимостей которых не хватает для zabbix'a
+
+13) Для корректной проверки установки заббикса, можно проверить его командой 
+
+```console
+root@localhost ~# find / -name "zabbix"
+/run/zabbix
+/etc/selinux/targeted/active/modules/100/zabbix
+/etc/zabbix
+/var/log/zabbix
+/usr/lib/zabbix
+/usr/share/zabbix
+```
