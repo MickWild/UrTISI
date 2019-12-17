@@ -277,11 +277,72 @@ Bye
 ```console
 root@localhost ~# zcat /usr/share/doc/zabbix-server-mysql-4.4.3/create.sql.gz | mysql -uzabbix -p zabbix
 ```
+, где -u <учетная запись для подключения к бд>, -p <подключение с паролем>, zabbix - база к которой подключаемся
 
-18) Далее нам надо зайти в директорию конфигов zabbix'а и добавить пароль который вы ввели при конфигурации базы  
+18) Далее нам надо зайти в директорию конфигов zabbix'а и добавить пароль от БД в файл конфига zabbix_server.conf который вы ввели при конфигурации базы mysql_security_installation
 
 ```console
 root@localhost ~# cd /etc/zabbix/
 root@localhost /e/zabbix# vi zabbix_server.conf 
 DBPassword=password 
+```
+
+19) После требуется в настройках http сервера раскомментировать строку с территорией
+
+```console
+root@localhost ~/zabbix-4.4.3# vi /etc/httpd/conf.d/zabbix.conf 
+#
+# Zabbix monitoring system php web frontend
+#
+
+Alias /zabbix /usr/share/zabbix
+
+<Directory "/usr/share/zabbix">
+    Options FollowSymLinks
+    AllowOverride None
+    Require all granted
+
+    <IfModule mod_php5.c>
+        php_value max_execution_time 300
+        php_value memory_limit 128M
+        php_value post_max_size 16M
+        php_value upload_max_filesize 2M
+        php_value max_input_time 300
+        php_value max_input_vars 10000
+        php_value always_populate_raw_post_data -1
+>        php_value date.timezone Asia/Yekaterinburg
+    </IfModule>
+</Directory>
+
+<Directory "/usr/share/zabbix/conf">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/app">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/include">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/local">
+    Require all denied
+</Directory>
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+~                                                                                                         
+"/etc/httpd/conf.d/zabbix.conf" 38L, 875C
 ```
