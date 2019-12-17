@@ -4,8 +4,8 @@
 ┬─[mickwild@ISeeYou:~]─[17:15:48]
 ╰─>$ ssh root@192.168.42.99
 ```
-2) Скачиваем с Kernel.org постеледнюю ванильную версию ядра https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz
-```console
+2) Скачиваем с Kernel.org постеледнюю ванильную версию [ядра] (https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz)
+```bash
 root@localhost ~# wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz
 --2019-12-16 17:17:50--  https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz
 Resolving cdn.kernel.org (cdn.kernel.org)... 151.101.113.176, 2a04:4e42:1b::432
@@ -19,20 +19,20 @@ Saving to: ‘linux-5.4.3.tar.xz’
 2019-12-16 17:18:56 (1,59 MB/s) - ‘linux-5.4.3.tar.xz’ saved [109443116/109443116]
 ```
 3) Разархивируем только что скачанный архив 
-```console
+```bash
 root@localhost ~# tar -xvf linux-5.4.3.tar.xz 
 ```
 4) Переходим в директорию разархивированного ядра, копируем туда конфигурацию старого ядра, для того чтобы на основе него скомпилировать новое ядро
-```console
+```bash
 root@localhost ~/linux-5.4.3# cd ./linux-5.4.3 && cp /boot/config-3.10.0-1062.9.1.el7.x86_64 .config
 ```
 5) Для компиляции ядра, нам потребуется скачать и установить 2 пакета make и gcc
 6) После установки пакетов, начинаем создавать новый конфиг ядра, на основании старого
-```console
+```bash
 root@localhost ~/linux-5.4.3# make oldconfig
 ```
   6.1) Во время создания конфигурации потребуется установить пакеты которые запросит компилятор, пример:
-```console
+```bash
 root@localhost ~/linux-5.4.3# make oldconfig
   HOSTCC  scripts/basic/fixdep
   HOSTCC  scripts/kconfig/conf.o
@@ -46,13 +46,13 @@ make: *** [sub-make] Error 2
 ```
    6.2) Как мы можем видеть конфигуратор make не находит пакета flex 
 
-```console
+```bash
 /bin/sh: flex: command not found
 ```
    Соответствеено нам нужно скачать и установить его 
    
 7) После того, как когфигурация соберется, терминал поприветствует вас окном с просьбой выбрать параметры конфигурации
-```console
+```bash
 root@localhost ~/linux-5.4.3# make oldconfig
   YACC    scripts/kconfig/parser.tab.[ch]
   HOSTCC  scripts/kconfig/lexer.lex.o
@@ -78,9 +78,9 @@ scripts/kconfig/conf  --oldconfig Kconfig
 *
 Compile also drivers which will not load (COMPILE_TEST) [N/y/?] (NEW)
 ```
-  7.1) Оставляем все как есть, если кто то хочет изменить конфигурацию, надо читать документы чтобы понимать что вы включаете или выключаете https://www.kernel.org/doc/
+  7.1) Оставляем все как есть, если кто то хочет изменить конфигурацию, надо читать [документы](https://www.kernel.org/doc/) чтобы понимать что вы включаете или выключаете
 8) После успешного создания конфига, начинаем сборку ядра в 4 потока 
-```console
+```bash
 root@localhost ~/linux-5.4.3# time make -j4
 Dec 16 16:48:44 Installed: mpfr-3.1.1-4.el7.x86_64
 Dec 16 16:48:44 Installed: libmpc-1.0.1-3.el7.x86_64
@@ -112,13 +112,13 @@ Dec 16 18:00:04 Installed: elfutils-libelf-devel-0.176-2.el7.x86_64
 
 9) После успешной сборки ядра производим его установку
 
-```console
+```bash
 root@localhost ~/linux-5.4.3# make install &&make modules_install
 ```
 
 10) Сборка и установка закончены, теперь требуется обновить конфигурацию загрузчика grub для того чтобы он знал он новой версии нашего ядра и мы смогли с ним загрузиться
 
-```console
+```bash
 grub2-mkconfig -o /boot/grub/grub.cfg
 ```
 ключ "-o" обозначает папку и файл нового сгенерированного конфига загрузчика
@@ -126,16 +126,16 @@ grub2-mkconfig -o /boot/grub/grub.cfg
 
 11) Далее нам требуется скачать файлы самого заббика, воспользуемся командой wget пример:
 
-```console
+```bash
 wget https://repo.zabbix.com/zabbix/4.4/rhel/7/x86_64/zabbix-web-mysql-4.4.3-1.el7.noarch.rpm
 ```
-Все необходимые пакеты для работы zabbix-server можно будет посмотреть на официальном сайте заббикс в документации по установке https://www.zabbix.com/documentation/current/manual или в видеогиде https://www.youtube.com/embed/yYmkFf3AEBo?autoplay=1
+Все необходимые пакеты для работы zabbix-server можно будет посмотреть на официальном сайте заббикс [в документации по установке](https://www.zabbix.com/documentation/current/manual) или в [видеогиде](https://www.youtube.com/embed/yYmkFf3AEBo?autoplay=1)
 
 12) Чтобы установить пакеты, надо использовать менеджер пакетов 
-на Red Hat rpm -i <название пакета>, 
-на Debian dpkg -i <название пакета>
+на [Red Hat rpm](http://fedoranews.org/alex/tutorial/rpm/) -i <название пакета>, 
+на [Debian dpkg](https://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_server/%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%B0%D0%BC%D0%B8/dpkg) -i <название пакета>
 Во время установки пакетов приложений могут возникнуть проблемы в установке, проблемы возникают из-за неразрешенный зависимостей, соответственно надо установить недостающие пакеты. Пример: 
-```console
+```bash
 warning: zabbix-agent-4.4.3-1.el7.x86_64.rpm: Header V4 RSA/SHA512 Signature, key ID a14fe591: NOKEY
 error: Failed dependencies:
 	java-headless >= 1.6.0 is needed by zabbix-java-gateway-4.4.3-1.el7.x86_64
@@ -159,7 +159,7 @@ error: Failed dependencies:
 
 13) Для корректной проверки установки заббикса, можно проверить его командой 
 
-```console
+```bash
 root@localhost ~# find / -name "zabbix"
 /run/zabbix
 /etc/selinux/targeted/active/modules/100/zabbix
@@ -176,11 +176,11 @@ yum install mariadb-server
 ее так же можно скачать с офф сайта https://downloads.mariadb.org/mariadb/10.4.11/
 
 15) После скачивания и установки базы данных, нам нужно произвести ее первоначальную настройку, в которой укажем пароль для подключения к бд, для этого запускаем нашу БД
-```console
+```bash
 root@localhost ~# systemctl start mariadb
 ```
 и запускаем скрипт первоначальной установки
-```console
+```bash
 root@localhost ~# mysql_secure_installation 
 
 NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
@@ -246,7 +246,7 @@ Thanks for using MariaDB!
 
 16) Теперь нам надо создать базу для zabbix, для этого подключаемся к БД и производим настройку по примеру офф сайта
 
-```console
+```bash
 root@localhost ~# mysql -uroot -p
 Enter password: 
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
@@ -256,7 +256,8 @@ Server version: 5.5.64-MariaDB MariaDB Server
 Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
+```
+```sql
 MariaDB [(none)]> 
 MariaDB [(none)]> create database zabbix character set utf8 collate utf8_bin;
 Query OK, 1 row affected (0.00 sec)
@@ -274,14 +275,14 @@ Bye
 
 17) После создания базы, импортируем в нее начальную схему и данные для базы 
 
-```console
+```bash
 root@localhost ~# zcat /usr/share/doc/zabbix-server-mysql-4.4.3/create.sql.gz | mysql -uzabbix -p zabbix
 ```
 , где -u <учетная запись для подключения к бд>, -p <подключение с паролем>, zabbix - база к которой подключаемся
 
 18) Далее нам надо зайти в директорию конфигов zabbix'а и добавить пароль от БД в файл конфига zabbix_server.conf который вы ввели при конфигурации базы mysql_security_installation
 
-```console
+```bash
 root@localhost ~# cd /etc/zabbix/
 root@localhost /e/zabbix# vi zabbix_server.conf 
 DBPassword=password 
@@ -289,7 +290,7 @@ DBPassword=password
 
 19) После требуется в настройках http сервера раскомментировать строку с территорией
 
-```console
+```bash
 root@localhost ~/zabbix-4.4.3# vi /etc/httpd/conf.d/zabbix.conf 
 #
 # Zabbix monitoring system php web frontend
@@ -348,7 +349,7 @@ Alias /zabbix /usr/share/zabbix
 ```
 20) По окончанию настроек может потребоваться отключить программный firewall, но это плохой тон, следует разрешить работу по определенному правилу, а именно, разрешить подключение на tcp\udp 80\443
 
-```console
+```bash
 root@localhost ~/zabbix-4.4.3# firewall-cmd --permanent --add-port=80/tcp
 success
 root@localhost ~/zabbix-4.4.3# firewall-cmd --permanent --add-port=443/tcp
@@ -364,8 +365,18 @@ success
 21) Далее потребуется скачать исходник zabbix и перенести оттуда директорию и все ее содержимое frontends в директорию /var/www/html/zabbix - если папки zabbix не будет, потребуется ее создать
 22) Заключительным действием будет перезапуск 3 сервисов - базы данных, zabbix-сервера и http-сервера
 
-```console
+```bash
 root@localhost ~/zabbix-4.4.3# systemctl restart mariadb zabbix-server httpd
 ```
 
 23) Если все было настроено правильно, то вы сможете загрузиться на web-страницу zabbix, для этого потребуется пройти по url http://<ip-address>/zabbix
+
+![](Pictures/Screenshot from 2019-12-18 01-27-35.png)
+
+![](Pictures/Screenshot from 2019-12-18 01-27-59.png)
+
+![](Pictures/Screenshot from 2019-12-18 01-28-20.png)
+
+![](Pictures/Screenshot from 2019-12-18 01-28-47.png)
+
+![](Pictures/Screenshot from 2019-12-18 01-47-55.png)
