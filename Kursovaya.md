@@ -82,33 +82,34 @@ Compile also drivers which will not load (COMPILE_TEST) [N/y/?] (NEW)
 8) После успешного создания конфига, начинаем сборку ядра в 4 потока 
 ```console
 root@localhost ~/linux-5.4.3# time make -j4
+Dec 16 16:48:44 Installed: mpfr-3.1.1-4.el7.x86_64
+Dec 16 16:48:44 Installed: libmpc-1.0.1-3.el7.x86_64
+Dec 16 16:48:44 Installed: cpp-4.8.5-39.el7.x86_64
+Dec 16 16:48:45 Installed: kernel-headers-3.10.0-1062.9.1.el7.x86_64
+Dec 16 16:48:45 Installed: glibc-headers-2.17-292.el7.x86_64
+Dec 16 16:48:45 Installed: glibc-devel-2.17-292.el7.x86_64
+Dec 16 16:48:46 Installed: gcc-4.8.5-39.el7.x86_64
+Dec 16 17:08:11 Installed: epel-release-7-11.noarch
+Dec 16 17:09:11 Installed: bc-1.06.95-13.el7.x86_64
+Dec 16 17:09:12 Installed: fish-2.3.1-2.el7.x86_64
+Dec 16 17:17:39 Installed: wget-1.14-18.el7_6.1.x86_64
+Dec 16 17:38:17 Installed: m4-1.4.16-10.el7.x86_64
+Dec 16 17:38:17 Installed: flex-2.5.37-6.el7.x86_64
+Dec 16 17:38:56 Installed: bison-3.0.4-2.el7.x86_64
+Dec 16 17:48:45 Installed: time-1.7-45.el7.x86_64
+Dec 16 17:58:56 Installed: keyutils-libs-devel-1.5.8-3.el7.x86_64
+Dec 16 17:58:56 Installed: libsepol-devel-2.5-10.el7.x86_64
+Dec 16 17:58:57 Installed: pcre-devel-8.32-17.el7.x86_64
+Dec 16 17:58:57 Installed: libselinux-devel-2.5-14.1.el7.x86_64
+Dec 16 17:58:57 Installed: libkadm5-1.15.1-37.el7_7.2.x86_64
+Dec 16 17:58:57 Installed: libcom_err-devel-1.42.9-16.el7.x86_64
+Dec 16 17:58:57 Installed: zlib-devel-1.2.7-18.el7.x86_64
+Dec 16 17:58:57 Installed: libverto-devel-0.2.5-4.el7.x86_64
+Dec 16 17:58:57 Installed: krb5-devel-1.15.1-37.el7_7.2.x86_64
+Dec 16 17:58:57 Installed: 1:openssl-devel-1.0.2k-19.el7.x86_64
+Dec 16 18:00:04 Installed: elfutils-libelf-devel-0.176-2.el7.x86_64
 ```
-> Dec 16 16:48:44 Installed: mpfr-3.1.1-4.el7.x86_64
-> Dec 16 16:48:44 Installed: libmpc-1.0.1-3.el7.x86_64
-> Dec 16 16:48:44 Installed: cpp-4.8.5-39.el7.x86_64
-> Dec 16 16:48:45 Installed: kernel-headers-3.10.0-1062.9.1.el7.x86_64
-> Dec 16 16:48:45 Installed: glibc-headers-2.17-292.el7.x86_64
-> Dec 16 16:48:45 Installed: glibc-devel-2.17-292.el7.x86_64
-> Dec 16 16:48:46 Installed: gcc-4.8.5-39.el7.x86_64
-> Dec 16 17:08:11 Installed: epel-release-7-11.noarch
-> Dec 16 17:09:11 Installed: bc-1.06.95-13.el7.x86_64
-> Dec 16 17:09:12 Installed: fish-2.3.1-2.el7.x86_64
-> Dec 16 17:17:39 Installed: wget-1.14-18.el7_6.1.x86_64
-> Dec 16 17:38:17 Installed: m4-1.4.16-10.el7.x86_64
-> Dec 16 17:38:17 Installed: flex-2.5.37-6.el7.x86_64
-> Dec 16 17:38:56 Installed: bison-3.0.4-2.el7.x86_64
-> Dec 16 17:48:45 Installed: time-1.7-45.el7.x86_64
-> Dec 16 17:58:56 Installed: keyutils-libs-devel-1.5.8-3.el7.x86_64
-> Dec 16 17:58:56 Installed: libsepol-devel-2.5-10.el7.x86_64
-> Dec 16 17:58:57 Installed: pcre-devel-8.32-17.el7.x86_64
-> Dec 16 17:58:57 Installed: libselinux-devel-2.5-14.1.el7.x86_64
-> Dec 16 17:58:57 Installed: libkadm5-1.15.1-37.el7_7.2.x86_64
-> Dec 16 17:58:57 Installed: libcom_err-devel-1.42.9-16.el7.x86_64
-> Dec 16 17:58:57 Installed: zlib-devel-1.2.7-18.el7.x86_64
-> Dec 16 17:58:57 Installed: libverto-devel-0.2.5-4.el7.x86_64
-> Dec 16 17:58:57 Installed: krb5-devel-1.15.1-37.el7_7.2.x86_64
-> Dec 16 17:58:57 Installed: 1:openssl-devel-1.0.2k-19.el7.x86_64
-> Dec 16 18:00:04 Installed: elfutils-libelf-devel-0.176-2.el7.x86_64
+
 9) После успешной сборки ядра производим его установку
 
 ```console
@@ -242,3 +243,33 @@ installation should now be secure.
 
 Thanks for using MariaDB!
 ```
+
+16) Теперь нам надо создать базу для zabbix, для этого подключаемся к БД и производим настройку по примеру офф сайта
+
+```console
+root@localhost ~# mysql -uroot -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 10
+Server version: 5.5.64-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> 
+MariaDB [(none)]> create database zabbix character set utf8 collate utf8_bin;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> grant all privileges on zabbix.* to zabbix@localhost identified by 'zabbix'
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> grant all privileges on zabbix.* to zabbix@localhost identified by 'zabbix';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> quit;
+Bye
+```
+
+17)
