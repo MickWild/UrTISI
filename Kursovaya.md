@@ -272,4 +272,16 @@ MariaDB [(none)]> quit;
 Bye
 ```
 
-17)
+17) После создания базы, импортируем в нее начальную схему и данные для базы 
+
+```console
+root@localhost ~# zcat /usr/share/doc/zabbix-server-mysql-4.4.3/create.sql.gz | mysql -uzabbix -p zabbix
+```
+
+18) Далее нам надо зайти в директорию конфигов zabbix'а и добавить пароль который вы ввели при конфигурации базы  
+
+```console
+root@localhost ~# cd /etc/zabbix/
+root@localhost /e/zabbix# vi zabbix_server.conf 
+DBPassword=password 
+```
