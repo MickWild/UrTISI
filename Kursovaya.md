@@ -4,7 +4,7 @@
 ┬─[mickwild@ISeeYou:~]─[17:15:48]
 ╰─>$ ssh root@192.168.42.99
 ```
-2) Скачиваем с Kernel.org постеледнюю ванильную версию [ядра] (https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz)
+2) Скачиваем с Kernel.org постеледнюю ванильную версию [ядра](https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz)
 ```bash
 root@localhost ~# wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz
 --2019-12-16 17:17:50--  https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.3.tar.xz
@@ -173,7 +173,7 @@ root@localhost ~# find / -name "zabbix"
 
 yum install mariadb-server
 
-ее так же можно скачать с офф сайта https://downloads.mariadb.org/mariadb/10.4.11/
+ее так же можно скачать с [офф сайта](https://downloads.mariadb.org/mariadb/10.4.11/)
 
 15) После скачивания и установки базы данных, нам нужно произвести ее первоначальную настройку, в которой укажем пароль для подключения к бд, для этого запускаем нашу БД
 ```bash
@@ -244,7 +244,7 @@ installation should now be secure.
 Thanks for using MariaDB!
 ```
 
-16) Теперь нам надо создать базу для zabbix, для этого подключаемся к БД и производим настройку по примеру офф сайта
+16) Теперь нам надо создать базу для zabbix, для этого подключаемся к БД и производим настройку по примеру [офф сайта zabbix'a](https://www.zabbix.com/ru/download?zabbix=4.4&os_distribution=centos&os_version=7&db=mysql&ws=apache)
 
 ```bash
 root@localhost ~# mysql -uroot -p
@@ -361,12 +361,37 @@ success
 root@localhost ~/zabbix-4.4.3# firewall-cmd --reload
 success
 ```
+Так же работу сервера может заблокировать SElinux, для этого можно его отключить 
+
+```bash
+root@localhost ~# vi /etc/selinux/config 
+
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - SELinux security policy is enforced.
+#     permissive - SELinux prints warnings instead of enforcing.
+#     disabled - No SELinux policy is loaded.
+SELINUX=disabled
+# SELINUXTYPE= can take one of three values:
+#     targeted - Targeted processes are protected,
+#     minimum - Modification of targeted policy. Only selected processes are protected.
+#     mls - Multi Level Security protection.
+SELINUXTYPE=targeted
+
+```
 
 21) Далее потребуется скачать исходник zabbix и перенести оттуда директорию и все ее содержимое frontends в директорию /var/www/html/zabbix - если папки zabbix не будет, потребуется ее создать
-22) Заключительным действием будет перезапуск 3 сервисов - базы данных, zabbix-сервера и http-сервера
+
+```bash
+mkdir -p /var/www/html/zabbix
+```
+
+22) Заключительным действием будет перезапуск 3 сервисов - базы данных, zabbix-сервера и http-сервера, создание ссылок автозапуска
 
 ```bash
 root@localhost ~/zabbix-4.4.3# systemctl restart mariadb zabbix-server httpd
+root@localhost ~/zabbix-4.4.3# systemctl enable mariadb zabbix-server httpd
+
 ```
 
 23) Если все было настроено правильно, то вы сможете загрузиться на web-страницу zabbix, для этого потребуется пройти по url http://<ip-address>/zabbix
