@@ -346,3 +346,24 @@ Alias /zabbix /usr/share/zabbix
 ~                                                                                                         
 "/etc/httpd/conf.d/zabbix.conf" 38L, 875C
 ```
+20) По окончанию настроек может потребоваться отключить программный firewall, но это плохой тон, следует разрешить работу по определенному правилу, а именно, разрешить подключение на tcp\udp 80\443
+
+```console
+root@localhost ~/zabbix-4.4.3# firewall-cmd --permanent --add-port=80/tcp
+success
+root@localhost ~/zabbix-4.4.3# firewall-cmd --permanent --add-port=443/tcp
+success
+root@localhost ~/zabbix-4.4.3# firewall-cmd --permanent --add-port=443/udp
+success
+root@localhost ~/zabbix-4.4.3# firewall-cmd --permanent --add-port=80/udp
+success
+root@localhost ~/zabbix-4.4.3# firewall-cmd --reload
+success
+```
+
+21) Далее потребуется скачать исходник zabbix и перенести оттуда директорию и все ее содержимое frontends в директорию /var/www/html/zabbix - если папки zabbix не будет, потребуется ее создать
+22) Заключительным действием будет перезапуск 3 сервисов - базы данных, zabbix-сервера и http-сервера
+
+```console
+root@localhost ~/zabbix-4.4.3# systemctl restart mariadb zabbix-server httpd
+```
