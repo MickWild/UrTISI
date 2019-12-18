@@ -396,7 +396,7 @@ root@localhost ~/zabbix-4.4.3# systemctl enable mariadb zabbix-server httpd
 
 ```
 
-23) Если все было настроено правильно, то вы сможете загрузиться на web-страницу zabbix, для этого потребуется пройти по url http://<ip-address>/zabbix
+23) Если все было настроено правильно, то вы сможете загрузиться на web-страницу zabbix, для этого потребуется пройти по url http://ip-address/zabbix
 
 ![](Pictures/1.png)
 
