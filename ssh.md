@@ -216,8 +216,43 @@ udp        0      0 localhost.locald:bootpc 0.0.0.0:*
 udp6       0      0 localhost:323           [::]:*                             
 raw6       0      0 [::]:ipv6-icmp          [::]:*                  7    
 ```
-6) Для подключения к серверу можно использовать приложения поддерживающие протокол ssh, либо встроенный клиент ssh, пример:
+6) Для подключения к серверу можно использовать приложения поддерживающие протокол ssh, либо предустановленный клиент linux ssh, пример:
 ```bash
 ┬─[mickwild@ISeeYou:~]─[13:11:55]
 ╰─>$ ssh root@192.168.42.219
 ```
+7) Так же подключаться можно по ключу, для этого используется команда ssh-keygen
+```bash
+[root@localhost ~]# ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:/ojhA6DuU37fpxsLQhhEb1eN08qruCDRYMKpd/tuhCY root@localhost.localdomain
+The key's randomart image is:
++---[RSA 2048]----+
+|  .o     .+      |
+|. o .   .o o     |
+|.= . o .. o      |
+|+ + + .  o       |
+|.o.+.o  S .      |
+|..Eo=... .       |
+|..o+.+o.o.       |
+| o...=++ooo.     |
+|... .+Bo.==      |
++----[SHA256]-----+
+```
+ключи которые сгенерируются, обычно сохраняются в /home/домашняя директория пользователя/.ssh/
+```bash
+[root@localhost ~]# cd .ssh
+[root@localhost .ssh]# ll
+total 16
+-rw-------. 1 root root  398 Dec 18 23:47 authorized_keys
+-rw-------. 1 root root 1876 Dec 19 03:04 id_rsa
+-rw-r--r--. 1 root root  408 Dec 19 03:04 id_rsa.pub
+-rw-r--r--. 1 root root  182 Dec 19 01:13 known_hosts
+```
+Далее, для того чтобы использовать сгенерируемый ключ в ssh , требуется его передать хосту, к которому вы будете подключаться. Передаваться должен .pub, приватный ключ должен оставаться только у пользователч
