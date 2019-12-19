@@ -182,4 +182,42 @@ Activate the web console with: systemctl enable --now cockpit.socket
 Last login: Wed Dec 18 23:47:12 2019 from 192.168.42.181
 [root@localhost ~]# 
 ```
-5) 
+5) Для проверки поднялся ли сервис надо использовать команду 
+```bash
+[root@localhost ~]# systemctl status sshd
+● sshd.service - OpenSSH server daemon
+   Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+   Active: active (running) since Thu 2019-12-19 02:42:15 EST; 3min 27s ago
+     Docs: man:sshd(8)
+           man:sshd_config(5)
+ Main PID: 780 (sshd)
+    Tasks: 1 (limit: 5063)
+   Memory: 4.7M
+   CGroup: /system.slice/sshd.service
+           └─780 /usr/sbin/sshd -D -oCiphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes256-cbc,aes128-gcm@openssh.com,aes128-ct>
+
+Dec 19 02:42:14 localhost.localdomain systemd[1]: Starting OpenSSH server daemon...
+Dec 19 02:42:15 localhost.localdomain sshd[780]: Server listening on 0.0.0.0 port 22.
+Dec 19 02:42:15 localhost.localdomain sshd[780]: Server listening on :: port 22.
+Dec 19 02:42:15 localhost.localdomain systemd[1]: Started OpenSSH server daemon.
+Dec 19 02:45:19 localhost.localdomain sshd[1790]: Accepted publickey for root from 192.168.42.181 port 59910 ssh2: RSA SHA256:ELuf8vg2V+jRb/y/7af0ntJsaJ>
+Dec 19 02:45:19 localhost.localdomain sshd[1790]: pam_unix(sshd:session): session opened for user root by (uid=0)
+```
+чтобы узнать порт для подключения к ssh можно его посмотреть так же в systemctl status sshd, либо 
+```bash
+[root@localhost ~]# netstat -la
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+tcp        0      0 localhost.localdoma:ssh 192.168.42.181:59910    ESTABLISHED
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN     
+udp        0      0 localhost:323           0.0.0.0:*                          
+udp        0      0 localhost.locald:bootpc 0.0.0.0:*                          
+udp6       0      0 localhost:323           [::]:*                             
+raw6       0      0 [::]:ipv6-icmp          [::]:*                  7    
+```
+6) Для подключения к серверу можно использовать приложения поддерживающие протокол ssh, либо встроенный клиент ssh, пример:
+```bash
+┬─[mickwild@ISeeYou:~]─[13:11:55]
+╰─>$ ssh root@192.168.42.219
+```
